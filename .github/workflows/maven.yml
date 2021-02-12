@@ -32,8 +32,9 @@ jobs:
       uses: azure/CLI@v1
       with:
         inlineScript: 
-           AZURETAG= $(az acr repository show-tags -n testtthcontainer --repository sampleapp --top 1 --orderby time_desc)
-           echo $AZURETAG
+           AZURETAG=$(az acr repository show-tags -n testtthcontainer --repository sampleapp --top 1 --orderby time_desc -o tsv | tr '\n' ' ')
+           echo "##vso[task.setvariable variable=RESULT]$AZURETAG"
+           echo "Result:$(RESULT)"
       
     - run: |
         docker build --build-arg LOGIN_SERVER=${{ secrets.REGISTRY_LOGIN_SERVER }} --build-arg REPOSITORY=$REPOSITORY --build-arg TAG=$AZURETAG . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/$REPOSITORY:${{ github.sha }}
