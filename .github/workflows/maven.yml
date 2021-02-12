@@ -31,8 +31,9 @@ jobs:
     - name: Azure CLI script
       uses: azure/CLI@v1
       with:
-        inlineScript: az acr repository show-tags -n testtthcontainer --repository sampleapp --top 1 --orderby time_desc
-      
+        inlineScript: 
+           $AZURETAG= $(az acr repository show-tags -n testtthcontainer --repository sampleapp --top 1 --orderby time_desc)
+           echo ${AZURETAG}      
       
     - run: |
         docker build --build-arg LOGIN_SERVER=${{ secrets.REGISTRY_LOGIN_SERVER }} --build-arg REPOSITORY=$REPOSITORY --build-arg TAG=$AZURETAG . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/$REPOSITORY:${{ github.sha }}
