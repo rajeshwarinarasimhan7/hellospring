@@ -33,6 +33,7 @@ jobs:
       with:
         inlineScript: 
            core.setOutput('AZURETAG',az acr repository show-tags -n testtthcontainer --repository sampleapp --top 1 --orderby time_desc)
+            echo $AZURETAG  
            echo "##vso[task.setvariable variable=RESULT]$AZURETAG"
            echo "Result:$(RESULT)"
            echo "::set-output name=tag::az acr repository show-tags -n testtthcontainer --repository sampleapp --top 1 --orderby time_desc" 
