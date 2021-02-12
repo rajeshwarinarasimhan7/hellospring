@@ -32,7 +32,7 @@ jobs:
       uses: azure/CLI@v1
       with:
         inlineScript: 
-           $AZURETAG= $(az acr repository show-tags -n testtthcontainer --repository sampleapp --top 1 --orderby time_desc)
+           AZURETAG= $(az acr repository show-tags -n testtthcontainer --repository sampleapp --top 1 --orderby time_desc)
            echo ${AZURETAG}
       
     - run: |
