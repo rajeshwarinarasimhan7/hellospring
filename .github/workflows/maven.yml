@@ -29,15 +29,14 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
              
     - name: Azure CLI script
+    - id: TAG
       uses: azure/CLI@v1
       with:
         inlineScript: 
-           core.setOutput('AZURETAG',az acr repository show-tags -n testtthcontainer --repository sampleapp --top 1 --orderby time_desc)
-            echo $AZURETAG  
-           echo "##vso[task.setvariable variable=RESULT]$AZURETAG"
-           echo "Result:$(RESULT)"
-           echo "::set-output name=tag::az acr repository show-tags -n testtthcontainer --repository sampleapp --top 1 --orderby time_desc" 
-      
+           RUN az acr repository show-tags -n testtthcontainer --repository sampleapp --top 1 --orderby time_desc
+           echo "::set-output name=tag::az acr repository show-tags -n testtthcontainer --repository sampleapp --top 1 --orderby time_desc"
+    - name : Get the output line
+      run: echo "The time was ${{ steps.TAG.outputs.time }}"
     - run: |
         docker build --build-arg LOGIN_SERVER=${{ secrets.REGISTRY_LOGIN_SERVER }} --build-arg REPOSITORY=$REPOSITORY --build-arg TAG=$AZURETAG . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/$REPOSITORY:${{ github.sha }}
         docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/$REPOSITORY:${{ github.sha }}
