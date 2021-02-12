@@ -1,5 +1,8 @@
 # syntax=docker/dockerfile:experimental
-FROM openjdk:8-jdk-alpine as build
+ARG  LOGIN_SERVER=test
+ARG  REPOSITORY=test
+ARG  TAG=latest
+from ${LOGIN_SERVER}/${REPOSITORY}:${TAG}
 WORKDIR /workspace/app
 
 COPY mvnw .
