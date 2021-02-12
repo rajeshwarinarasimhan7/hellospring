@@ -32,7 +32,7 @@ jobs:
       uses: azure/CLI@v1
       with:
         inlineScript: 
-           AZURETAG=`az acr repository show-tags -n testtthcontainer --repository sampleapp --top 1 --orderby time_desc -o tsv | tr ' ')`
+           core.setOutput('AZURETAG',az acr repository show-tags -n testtthcontainer --repository sampleapp --top 1 --orderby time_desc)
            echo "##vso[task.setvariable variable=RESULT]$AZURETAG"
            echo "Result:$(RESULT)"
            echo "::set-output name=tag::az acr repository show-tags -n testtthcontainer --repository sampleapp --top 1 --orderby time_desc" 
