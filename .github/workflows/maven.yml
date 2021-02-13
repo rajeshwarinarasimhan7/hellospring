@@ -30,7 +30,13 @@ jobs:
         login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
-             
+        
+    -  name: Azure CLI script file
+       uses: azure/CLI@v1
+       with:
+        azcliversion: 2.0.72
+        inlineScript: az acr repository show-tags -n testtthcontainer --repository sampleapp --top 1 --orderby time_desc 
+                   
     - run: |
         docker build --build-arg LOGIN_SERVER=${{ secrets.REGISTRY_LOGIN_SERVER }} --build-arg REPOSITORY=$BASE_REPOSITORY --build-arg TAG=$AZURETAG . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/$REPOSITORY:${{ github.sha }}
         docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/$REPOSITORY:${{ github.sha }}
